@@ -23,6 +23,27 @@ graph TD
     API -.->|Cache| Redis
 ```
 
+## Phase 1: Backend & Database Foundation
+
+```mermaid
+graph TD
+    API[FastAPI Backend]
+    
+    subgraph Data Access Layer
+        Routes[API Routes]
+        Services[Business Logic Services]
+        Repos[Repositories]
+        Models[SQLAlchemy Models]
+    end
+    
+    API --> Routes
+    Routes --> Services
+    Services --> Repos
+    Repos --> Models
+    
+    Models -.->|Alembic| Postgres[(PostgreSQL)]
+```
+
 ## Final Target Architecture
 
 ```mermaid
