@@ -11,13 +11,16 @@ app = FastAPI(
     version="0.1.0"
 )
 
+from sqlalchemy.exc import SQLAlchemyError
+
+
 @app.get("/health")
-def health_check(db: Session = Depends(get_db)):
+def health_check(db: Session = Depends(get_db)):  # noqa: B008
     """Health check endpoint, verifies database connectivity."""
     db_status = "ok"
     try:
         db.execute(text("SELECT 1"))
-    except Exception:
+    except SQLAlchemyError:
         db_status = "error"
         
     return JSONResponse(content={
