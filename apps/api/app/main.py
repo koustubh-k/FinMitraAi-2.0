@@ -3,13 +3,17 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app.api.router import api_router
+from app.core.config import settings
 from app.db.session import get_db
 
 app = FastAPI(
-    title="FinMitra 2.0 API",
-    description="Evidence-first financial intelligence platform API",
-    version="0.1.0"
+    title=settings.app_name,
+    description="Backend API for FinMitra",
+    version="0.1.0",
 )
+
+app.include_router(api_router, prefix="/api/v1")
 
 from sqlalchemy.exc import SQLAlchemyError
 
