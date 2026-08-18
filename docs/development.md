@@ -65,6 +65,18 @@ npm run dev
 ```
 *Web app at http://localhost:3000*
 
+## Database Migrations (Alembic)
+
+We use Alembic for database migrations. To run migrations, you can execute them directly inside the API container:
+
+```bash
+# Generate a new migration after changing models
+docker compose exec api alembic revision --autogenerate -m "Description of changes"
+
+# Apply migrations to the database
+docker compose exec api alembic upgrade head
+```
+
 ## Testing and Linting
 
 ```bash
