@@ -444,8 +444,8 @@ FinMitra is being developed incrementally.
 | Phase 0  | Product & Engineering Foundation  | ✅ Complete |
 | Phase 1  | Backend + PostgreSQL Foundation   | ✅ Complete |
 | Phase 2  | Authentication                    | ✅ Complete |
-| Phase 3  | Market Data Abstraction           | 🔵 Next    |
-| Phase 4  | Deterministic Portfolio Engine    | ⚪ Planned  |
+| Phase 3  | Market Data Abstraction           | ✅ Complete |
+| Phase 4  | Deterministic Portfolio Engine    | 🚀 Next    |
 | Phase 5  | LLM Provider Abstraction          | ⚪ Planned  |
 | Phase 6  | First Research Agent              | ⚪ Planned  |
 | Phase 7  | LangGraph Workflows               | ⚪ Planned  |
@@ -619,9 +619,9 @@ Financial information can be incomplete, delayed, inaccurate, or subject to chan
 
 # Project Status
 
-**Current Phase:** Phase 2 — Authentication ✅
+**Current Phase:** Phase 3 – Market Data Abstraction ✅
 
-**Next Phase:** Phase 3 — Market Data Abstraction
+**Next Phase:** Phase 4 – Deterministic Portfolio Engine
 
 The project is currently under active development.
 
