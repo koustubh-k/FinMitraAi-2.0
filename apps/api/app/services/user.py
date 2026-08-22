@@ -14,6 +14,9 @@ class UserService:
 
     def get_user(self, user_id: UUID) -> User | None:
         return repositories.user.get(self.db, id=user_id)
+        
+    def get_user_by_email(self, email: str) -> User | None:
+        return repositories.user.get_by_email(self.db, email=email)
 
     def create_user(self, user_in: UserCreate) -> User:
         user = repositories.user.get_by_email(self.db, email=user_in.email)

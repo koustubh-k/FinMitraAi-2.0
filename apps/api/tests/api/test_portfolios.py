@@ -5,11 +5,12 @@ from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
 
 from app.api.deps import get_portfolio_service
+from app.auth.dependencies import get_current_user
 from app.main import app
 from app.models.portfolio import Portfolio
+from app.models.user import User
 
 client = TestClient(app)
-
 
 def test_create_portfolio_success():
     mock_service = MagicMock()
@@ -25,6 +26,7 @@ def test_create_portfolio_success():
     mock_service.create_portfolio.return_value = mock_portfolio
 
     app.dependency_overrides[get_portfolio_service] = lambda: mock_service
+    app.dependency_overrides[get_current_user] = lambda: User(id=user_id)
 
     try:
         response = client.post(
@@ -53,6 +55,7 @@ def test_get_portfolios_success():
     mock_service.get_user_portfolios.return_value = [mock_portfolio]
 
     app.dependency_overrides[get_portfolio_service] = lambda: mock_service
+    app.dependency_overrides[get_current_user] = lambda: User(id=user_id)
 
     try:
         response = client.get(f"/api/v1/portfolios/?user_id={user_id}")

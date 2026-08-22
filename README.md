@@ -16,7 +16,7 @@ The project is being rebuilt from the ground up with a focus on:
 * **Open-source and reproducible development**
 
 > **Status:** 🚧 Under active development
-> **Current milestone:** Phase 0 — Foundation completed
+> **Current milestone:** Phase 2 — Authentication completed
 
 ---
 
@@ -442,9 +442,9 @@ FinMitra is being developed incrementally.
 | Phase    | Milestone                         | Status     |
 | -------- | --------------------------------- | ---------- |
 | Phase 0  | Product & Engineering Foundation  | ✅ Complete |
-| Phase 1  | Backend + PostgreSQL Foundation   | 🔵 Next    |
-| Phase 2  | Authentication                    | ⚪ Planned  |
-| Phase 3  | Market Data Abstraction           | ⚪ Planned  |
+| Phase 1  | Backend + PostgreSQL Foundation   | ✅ Complete |
+| Phase 2  | Authentication                    | ✅ Complete |
+| Phase 3  | Market Data Abstraction           | 🔵 Next    |
 | Phase 4  | Deterministic Portfolio Engine    | ⚪ Planned  |
 | Phase 5  | LLM Provider Abstraction          | ⚪ Planned  |
 | Phase 6  | First Research Agent              | ⚪ Planned  |
@@ -619,9 +619,9 @@ Financial information can be incomplete, delayed, inaccurate, or subject to chan
 
 # Project Status
 
-**Current Phase:** Phase 0 — Product & Engineering Foundation ✅
+**Current Phase:** Phase 2 — Authentication ✅
 
-**Next Phase:** Phase 1 — Backend + PostgreSQL Foundation
+**Next Phase:** Phase 3 — Market Data Abstraction
 
 The project is currently under active development.
 
