@@ -7,7 +7,11 @@ from app.services.market_data import MarketDataService, get_market_data_service
 def get_mock_market_data_service():
     return MarketDataService(provider_name="mock")
 
-app.dependency_overrides[get_market_data_service] = get_mock_market_data_service
+@pytest.fixture(autouse=True)
+def override_dependency():
+    app.dependency_overrides[get_market_data_service] = get_mock_market_data_service
+    yield
+    app.dependency_overrides.clear()
 
 client = TestClient(app)
 
