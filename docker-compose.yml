@@ -31,6 +31,8 @@ services:
     environment:
       - DATABASE_URL=postgresql+psycopg://finmitra:finmitra@postgres:5432/finmitra
       - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./apps/api:/app
     depends_on:
       postgres:
         condition: service_healthy

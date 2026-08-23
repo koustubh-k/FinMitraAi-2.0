@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 15
     refresh_token_expire_days: int = 30
+    
+    market_data_provider: str = "yahoo"
 
     model_config = SettingsConfigDict(
         env_file=(".env", "../.env", "../../.env"),
