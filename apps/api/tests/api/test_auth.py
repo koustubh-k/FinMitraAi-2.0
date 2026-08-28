@@ -1,13 +1,13 @@
+import uuid
+from datetime import datetime, timezone
 from unittest.mock import MagicMock
+
 import pytest
 from fastapi.testclient import TestClient
-from datetime import datetime, timezone, timedelta
-import uuid
 
-from app.main import app
 from app.api.endpoints.auth import get_auth_service
 from app.auth.dependencies import get_current_user
-from app.auth.password import PasswordHasher
+from app.main import app
 from app.models.user import User
 
 client = TestClient(app)

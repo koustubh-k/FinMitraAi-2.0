@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
-from typing import Optional, List
+
 from pydantic import BaseModel, Field
+
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
@@ -10,9 +11,9 @@ class Quote(BaseModel):
     price: float
     currency: str
     timestamp: datetime
-    previous_close: Optional[float] = None
-    day_change: Optional[float] = None
-    day_change_percent: Optional[float] = None
+    previous_close: float | None = None
+    day_change: float | None = None
+    day_change_percent: float | None = None
     data_timestamp: datetime
     retrieved_at: datetime = Field(default_factory=utc_now)
 
@@ -22,32 +23,32 @@ class HistoricalPrice(BaseModel):
     high: float
     low: float
     close: float
-    adjusted_close: Optional[float] = None
+    adjusted_close: float | None = None
     volume: int
 
 class HistoricalPriceResponse(BaseModel):
     symbol: str
     interval: str
-    data: List[HistoricalPrice]
+    data: list[HistoricalPrice]
     retrieved_at: datetime = Field(default_factory=utc_now)
 
 class CompanyProfile(BaseModel):
     symbol: str
     name: str
-    exchange: Optional[str] = None
-    currency: Optional[str] = None
-    sector: Optional[str] = None
-    industry: Optional[str] = None
-    country: Optional[str] = None
-    data_timestamp: Optional[datetime] = None
+    exchange: str | None = None
+    currency: str | None = None
+    sector: str | None = None
+    industry: str | None = None
+    country: str | None = None
+    data_timestamp: datetime | None = None
     retrieved_at: datetime = Field(default_factory=utc_now)
 
 class FinancialMetrics(BaseModel):
     symbol: str
-    market_cap: Optional[float] = None
-    pe_ratio: Optional[float] = None
-    eps: Optional[float] = None
-    dividend_yield: Optional[float] = None
-    beta: Optional[float] = None
-    data_timestamp: Optional[datetime] = None
+    market_cap: float | None = None
+    pe_ratio: float | None = None
+    eps: float | None = None
+    dividend_yield: float | None = None
+    beta: float | None = None
+    data_timestamp: datetime | None = None
     retrieved_at: datetime = Field(default_factory=utc_now)

@@ -16,7 +16,7 @@ The project is being rebuilt from the ground up with a focus on:
 * **Open-source and reproducible development**
 
 > **Status:** 🚧 Under active development
-> **Current milestone:** Phase 2 — Authentication completed
+> **Current milestone:** Phase 2 (Authentication) & Phase 3 (Market Data) Completed
 
 ---
 
@@ -496,7 +496,7 @@ Docker Compose is used to make the development environment reproducible.
 docker compose up -d
 ```
 
-The complete setup instructions are maintained in the project documentation.
+The complete setup instructions are maintained in the [Phase 2 Setup Guide](docs/setup/phase-2-setup.md).
 
 ---
 

@@ -19,6 +19,8 @@ class Portfolio(Base):
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
 
     user = relationship("User", back_populates="portfolios")
+    transactions = relationship("Transaction", back_populates="portfolio", cascade="all, delete-orphan")
+    holdings = relationship("Holding", back_populates="portfolio", cascade="all, delete-orphan")
 
     __table_args__ = (
         UniqueConstraint('user_id', 'name', name='uix_portfolio_user_name'),

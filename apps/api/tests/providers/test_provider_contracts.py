@@ -1,13 +1,15 @@
-import pytest
 from datetime import date, timedelta
+
+import pytest
+
+from app.core.errors import SymbolNotFoundError
 from app.providers.market.registry import provider_registry
 from app.schemas.market_data import (
-    Quote,
-    HistoricalPriceResponse,
     CompanyProfile,
-    FinancialMetrics
+    FinancialMetrics,
+    HistoricalPriceResponse,
+    Quote,
 )
-from app.core.errors import SymbolNotFoundError
 
 # Test against both providers to ensure they honor the same contract
 # If testing locally without internet, the yahoo tests might fail/timeout.

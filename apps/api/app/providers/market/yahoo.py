@@ -1,21 +1,22 @@
-import yfinance as yf
 from datetime import date, datetime, timezone
+
 import pandas as pd
-from typing import Optional
+import yfinance as yf
+
+from app.core.errors import (
+    InvalidMarketDataError,
+    ProviderUnavailableError,
+    SymbolNotFoundError,
+)
 from app.schemas.market_data import (
-    Quote,
-    HistoricalPrice,
-    HistoricalPriceResponse,
     CompanyProfile,
     FinancialMetrics,
-    utc_now
+    HistoricalPrice,
+    HistoricalPriceResponse,
+    Quote,
+    utc_now,
 )
-from app.core.errors import (
-    SymbolNotFoundError,
-    ProviderUnavailableError,
-    InvalidMarketDataError
-)
-from app.providers.market.base import MarketDataProvider
+
 
 class YahooProvider:
     """Market data provider implementation using yfinance."""
@@ -59,7 +60,7 @@ class YahooProvider:
         except Exception as e:
             if "Rate" in str(e): # generic fallback
                 raise ProviderUnavailableError("Yahoo Finance provider is unavailable") from e
-            raise InvalidMarketDataError(f"Failed to fetch quote for {symbol}: {str(e)}") from e
+            raise InvalidMarketDataError(f"Failed to fetch quote for {symbol}: {e!s}") from e
 
     def get_historical_prices(self, symbol: str, start: date, end: date, interval: str) -> HistoricalPriceResponse:
         try:
@@ -112,7 +113,7 @@ class YahooProvider:
         except SymbolNotFoundError:
             raise
         except Exception as e:
-            raise InvalidMarketDataError(f"Failed to fetch historical prices for {symbol}: {str(e)}") from e
+            raise InvalidMarketDataError(f"Failed to fetch historical prices for {symbol}: {e!s}") from e
 
     def get_company_profile(self, symbol: str) -> CompanyProfile:
         try:
@@ -136,7 +137,7 @@ class YahooProvider:
         except SymbolNotFoundError:
             raise
         except Exception as e:
-            raise InvalidMarketDataError(f"Failed to fetch profile for {symbol}: {str(e)}") from e
+            raise InvalidMarketDataError(f"Failed to fetch profile for {symbol}: {e!s}") from e
 
     def get_financial_metrics(self, symbol: str) -> FinancialMetrics:
         try:
@@ -158,4 +159,4 @@ class YahooProvider:
         except SymbolNotFoundError:
             raise
         except Exception as e:
-            raise InvalidMarketDataError(f"Failed to fetch metrics for {symbol}: {str(e)}") from e
+            raise InvalidMarketDataError(f"Failed to fetch metrics for {symbol}: {e!s}") from e

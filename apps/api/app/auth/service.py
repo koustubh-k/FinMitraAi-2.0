@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta, timezone
-from uuid import UUID
 
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
@@ -10,7 +9,6 @@ from app.core.config import settings
 from app.models.refresh_token import RefreshToken
 from app.models.user import User
 from app.schemas.auth import Token, UserLogin, UserRegister
-from app.schemas.user import UserCreate
 from app.services.user import UserService
 
 
@@ -114,8 +112,8 @@ class AuthService:
     def _issue_tokens(self, user: User) -> Token:
         access_token = create_access_token(subject=str(user.id))
         
-        import secrets
         import hashlib
+        import secrets
         raw_refresh_token = secrets.token_urlsafe(32)
         
         m = hashlib.sha256()

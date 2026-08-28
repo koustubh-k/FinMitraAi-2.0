@@ -2,9 +2,9 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 
+import app.models  # noqa: F401
 from alembic import context
 from app.core.config import settings
-import app.models  # noqa: F401
 from app.db.base import Base
 
 # this is the Alembic Config object, which provides

@@ -1,5 +1,4 @@
 from collections.abc import Generator
-from uuid import UUID
 
 from fastapi import Depends
 from sqlalchemy.orm import Session
