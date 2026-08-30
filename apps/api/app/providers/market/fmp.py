@@ -1,5 +1,5 @@
-import logging
-import requests
+from app.core.logger import setup_logger
+import httpx
 from datetime import date
 
 from app.core.config import settings
@@ -12,7 +12,7 @@ from app.schemas.market_data import (
     Quote,
 )
 
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
 
 
 class FMPProvider(MarketDataProvider):
@@ -39,7 +39,7 @@ class FMPProvider(MarketDataProvider):
         }
         
         try:
-            response = requests.get(url, params=params, timeout=10)
+            response = httpx.get(url, params=params, timeout=10)
             
             # FMP returns 429 for rate limit exceeded or 403 for invalid key
             if response.status_code in (403, 429):
@@ -62,7 +62,7 @@ class FMPProvider(MarketDataProvider):
                 source="fmp"
             )
             
-        except requests.RequestException as e:
+        except httpx.HTTPError as e:
             logger.error(f"FMP request failed for {symbol}: {e}")
             raise ProviderUnavailableError(f"Network error with FMP: {e}")
         except SymbolNotFoundError:

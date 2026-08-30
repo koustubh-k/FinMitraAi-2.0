@@ -49,7 +49,10 @@ def generate_answer(state: AssistantState) -> AssistantState:
     llm = _get_llm(provider)
     
     if llm:
-        response = llm.invoke(messages)
+        response = llm.invoke(
+            messages,
+            config={"tags": ["agent:research", f"user:{state.get('user_id', 'unknown')}"]}
+        )
         state["generated_answer"] = response.content
     else:
         state["generated_answer"] = "Error: LLM provider not configured properly."
@@ -66,17 +69,20 @@ def validate_citations(state: AssistantState) -> AssistantState:
 def _get_llm(provider: str):
     if provider == "groq":
         from langchain_groq import ChatGroq
-        return ChatGroq(model=os.getenv("LLM_MODEL", "llama3-8b-8192"))
+        return ChatGroq(model=os.getenv("LLM_MODEL", "mixtral-8x7b-32768"))
     elif provider == "gemini":
         from langchain_google_genai import ChatGoogleGenerativeAI
         return ChatGoogleGenerativeAI(model=os.getenv("LLM_MODEL", "gemini-1.5-flash"))
+    elif provider == "mistral":
+        from langchain_mistralai import ChatMistralAI
+        return ChatMistralAI(model=os.getenv("LLM_MODEL", "open-mistral-7b"))
     elif provider == "openrouter":
         from langchain_openai import ChatOpenAI
         return ChatOpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=os.getenv("OPENROUTER_API_KEY"),
-            model=os.getenv("LLM_MODEL", "mistralai/mistral-7b-instruct:free")
+            model=os.getenv("LLM_MODEL", "mistralai/mistral-large")
         )
     else: # Default OpenAI
         from langchain_openai import ChatOpenAI
-        return ChatOpenAI(model=os.getenv("LLM_MODEL", "gpt-4o-mini"))
+        return ChatOpenAI(model=os.getenv("LLM_MODEL", "gpt-4o"))

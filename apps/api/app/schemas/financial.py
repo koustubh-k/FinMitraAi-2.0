@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.transaction import TransactionType
 
@@ -24,8 +24,7 @@ class TransactionResponse(BaseModel):
     transaction_date: datetime
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class HoldingResponse(BaseModel):
     id: UUID
@@ -36,8 +35,7 @@ class HoldingResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class PositionAllocation(BaseModel):
     symbol: str

@@ -1,4 +1,4 @@
-import logging
+from app.core.logger import setup_logger
 from datetime import date
 
 from app.core.config import settings
@@ -11,7 +11,7 @@ from app.schemas.market_data import (
     Quote,
 )
 
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
 
 class StubBaseProvider(MarketDataProvider):
     """Base class for stubbed providers."""

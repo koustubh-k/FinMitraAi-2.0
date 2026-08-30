@@ -36,7 +36,10 @@ def handle_portfolio(state: AssistantState) -> AssistantState:
     tool_results = []
     
     for _ in range(5):  # Max 5 iterations to prevent infinite loops
-        response = llm_with_tools.invoke(messages)
+        response = llm_with_tools.invoke(
+            messages,
+            config={"tags": ["agent:portfolio", f"user:{state['user_id']}"]}
+        )
         messages.append(response)
         
         if not hasattr(response, "tool_calls") or not response.tool_calls:
@@ -77,17 +80,20 @@ def handle_portfolio(state: AssistantState) -> AssistantState:
 def _get_tool_llm(provider: str):
     if provider == "groq":
         from langchain_groq import ChatGroq
-        return ChatGroq(model=os.getenv("LLM_MODEL", "llama3-8b-8192"))
+        return ChatGroq(model=os.getenv("LLM_MODEL", "mixtral-8x7b-32768"))
     elif provider == "gemini":
         from langchain_google_genai import ChatGoogleGenerativeAI
         return ChatGoogleGenerativeAI(model=os.getenv("LLM_MODEL", "gemini-1.5-flash"))
+    elif provider == "mistral":
+        from langchain_mistralai import ChatMistralAI
+        return ChatMistralAI(model=os.getenv("LLM_MODEL", "open-mistral-7b"))
     elif provider == "openrouter":
         from langchain_openai import ChatOpenAI
         return ChatOpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=os.getenv("OPENROUTER_API_KEY"),
-            model=os.getenv("LLM_MODEL", "mistralai/mistral-7b-instruct:free")
+            model=os.getenv("LLM_MODEL", "mistralai/mistral-large")
         )
     else: # Default OpenAI
         from langchain_openai import ChatOpenAI
-        return ChatOpenAI(model=os.getenv("LLM_MODEL", "gpt-4o-mini"))
+        return ChatOpenAI(model=os.getenv("LLM_MODEL", "gpt-4o"))
