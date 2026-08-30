@@ -16,7 +16,7 @@ The project is being rebuilt from the ground up with a focus on:
 * **Open-source and reproducible development**
 
 > **Status:** 🚧 Under active development
-> **Current milestone:** Phase 2 (Authentication) & Phase 3 (Market Data) Completed
+> **Current position:** Phase 5 (Portfolio + Education Agents) completed. 🚀 Next: Phase 6 (Safety + MCP + AI UX)
 
 ---
 
@@ -439,31 +439,17 @@ finmitra/
 
 FinMitra is being developed incrementally.
 
-| Phase    | Milestone                         | Status     |
-| -------- | --------------------------------- | ---------- |
-| Phase 0  | Product & Engineering Foundation  | ✅ Complete |
-| Phase 1  | Backend + PostgreSQL Foundation   | ✅ Complete |
-| Phase 2  | Authentication                    | ✅ Complete |
-| Phase 3  | Market Data Abstraction           | ✅ Complete |
-| Phase 4  | Deterministic Portfolio Engine    | 🚀 Next    |
-| Phase 5  | LLM Provider Abstraction          | ⚪ Planned  |
-| Phase 6  | First Research Agent              | ⚪ Planned  |
-| Phase 7  | LangGraph Workflows               | ⚪ Planned  |
-| Phase 8  | RAG + Hybrid Retrieval            | ⚪ Planned  |
-| Phase 9  | Evidence & Citations              | ⚪ Planned  |
-| Phase 10 | Portfolio Agent                   | ⚪ Planned  |
-| Phase 11 | Education Agent                   | ⚪ Planned  |
-| Phase 12 | Safety Layer                      | ⚪ Planned  |
-| Phase 13 | Alerts                            | ⚪ Planned  |
-| Phase 14 | MCP Integration                   | ⚪ Planned  |
-| Phase 15 | Evaluation Framework              | ⚪ Planned  |
-| Phase 16 | Observability                     | ⚪ Planned  |
-| Phase 17 | Performance & Caching             | ⚪ Planned  |
-| Phase 18 | Frontend Product                  | ⚪ Planned  |
-| Phase 19 | Security & Production Hardening   | ⚪ Planned  |
-| Phase 20 | Cloud Deployment                  | ⚪ Planned  |
-| Phase 21 | Public Beta                       | ⚪ Planned  |
-| Phase 22 | Research / Evaluation Publication | ⚪ Planned  |
+| Phase    | Milestone                         | Status       |
+| -------- | --------------------------------- | ------------ |
+| Phase 0  | Foundation                        | ✅ Complete   |
+| Phase 1  | Backend + Data Foundation         | ✅ Complete   |
+| Phase 2  | Authentication + Market Data      | ✅ Complete   |
+| Phase 3  | Deterministic Financial Engine    | ✅ Complete   |
+| Phase 4  | AI Research MVP                   | ✅ Complete   |
+| Phase 5  | Portfolio + Education Agents      | ✅ Complete   |
+| Phase 6  | Safety + MCP + AI UX              | ⚪ Planned    |
+| Phase 7  | Evaluation + Observability + Perf | ⚪ Planned    |
+| Phase 8  | Production + Cloud + Beta         | ⚪ Planned    |
 
 ---
 
@@ -496,7 +482,13 @@ Docker Compose is used to make the development environment reproducible.
 docker compose up -d
 ```
 
-The complete setup instructions are maintained in the [Phase 2 Setup Guide](docs/setup/phase-2-setup.md).
+### Environment Setup (API Keys)
+
+To run FinMitra 2.0 with full AI capabilities, you need to set up free API keys in your `.env` file for the preferred LLM and Market Data providers. 
+
+Please refer to the detailed **[Phase 4 Setup Guide](docs/setup/phase-4-setup.md)** for instructions on how to obtain API keys from:
+- **LLM Providers:** [Groq](https://console.groq.com/), [Google AI Studio (Gemini)](https://aistudio.google.com/), or [OpenRouter](https://openrouter.ai/).
+- **Market Data Providers:** [AlphaVantage](https://www.alphavantage.co/support/#api-key), [Finnhub](https://finnhub.io/register), etc.
 
 ---
 
@@ -619,9 +611,9 @@ Financial information can be incomplete, delayed, inaccurate, or subject to chan
 
 # Project Status
 
-**Current Phase:** Phase 3 – Market Data Abstraction ✅
+**Current Phase:** Phase 5 (Portfolio + Education Agents) ✅
 
-**Next Phase:** Phase 4 – Deterministic Portfolio Engine
+**Next Phase:** Phase 6 (Safety + MCP + AI UX) 🚀
 
 The project is currently under active development.
 
