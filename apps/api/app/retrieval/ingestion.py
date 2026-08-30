@@ -1,0 +1,64 @@
+import os
+from typing import List
+from pathlib import Path
+from bs4 import BeautifulSoup
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
+from sqlalchemy.orm import Session
+from app.models.document import Document
+from app.models.document_chunk import DocumentChunk
+from app.retrieval.embeddings import get_embedding_model
+
+def get_text_splitter():
+    return RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len,
+        is_separator_regex=False,
+    )
+
+def ingest_pdf(file_path: str, db: Session, source_url: str = None) -> Document:
+    """Ingests a PDF file into the database."""
+    loader = PyPDFLoader(file_path)
+    pages = loader.load()
+    
+    # Simple hash for content deduplication
+    content = "".join([p.page_content for p in pages])
+    import hashlib
+    content_hash = hashlib.sha256(content.encode()).hexdigest()
+    
+    # Check if exists
+    existing_doc = db.query(Document).filter(Document.content_hash == content_hash).first()
+    if existing_doc:
+        return existing_doc
+    
+    doc = Document(
+        title=Path(file_path).name,
+        source="local_pdf",
+        source_url=source_url,
+        document_type="pdf",
+        content_hash=content_hash
+    )
+    db.add(doc)
+    db.commit()
+    db.refresh(doc)
+    
+    splitter = get_text_splitter()
+    chunks = splitter.split_documents(pages)
+    
+    embeddings = get_embedding_model()
+    texts = [c.page_content for c in chunks]
+    vectors = embeddings.embed_documents(texts)
+    
+    for i, (chunk, vector) in enumerate(zip(chunks, vectors)):
+        doc_chunk = DocumentChunk(
+            document_id=doc.id,
+            chunk_index=i,
+            text=chunk.page_content,
+            embedding=vector,
+            metadata_=chunk.metadata
+        )
+        db.add(doc_chunk)
+    
+    db.commit()
+    return doc

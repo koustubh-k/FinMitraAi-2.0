@@ -1,14 +1,15 @@
-from datetime import date, datetime, timezone, timedelta
+from datetime import date, datetime, timedelta, timezone
+
+from app.core.errors import SymbolNotFoundError
 from app.schemas.market_data import (
-    Quote,
-    HistoricalPrice,
-    HistoricalPriceResponse,
     CompanyProfile,
     FinancialMetrics,
-    utc_now
+    HistoricalPrice,
+    HistoricalPriceResponse,
+    Quote,
+    utc_now,
 )
-from app.core.errors import SymbolNotFoundError
-from app.providers.market.base import MarketDataProvider
+
 
 class MockMarketDataProvider:
     """A deterministic mock market data provider for testing."""

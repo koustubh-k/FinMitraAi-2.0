@@ -1,17 +1,28 @@
 from datetime import date
+
 from app.core.config import settings
 from app.providers.market.registry import provider_registry
 from app.schemas.market_data import (
-    Quote,
-    HistoricalPriceResponse,
     CompanyProfile,
-    FinancialMetrics
+    FinancialMetrics,
+    HistoricalPriceResponse,
+    Quote,
 )
+
+
+from app.providers.market.composite import CompositeMarketDataProvider
 
 class MarketDataService:
     def __init__(self, provider_name: str = None):
         self.provider_name = provider_name or settings.market_data_provider
-        self.provider = provider_registry.get(self.provider_name)
+        
+        provider_names = [name.strip() for name in self.provider_name.split(",")]
+        
+        if len(provider_names) == 1:
+            self.provider = provider_registry.get(provider_names[0])
+        else:
+            providers = [provider_registry.get(name) for name in provider_names]
+            self.provider = CompositeMarketDataProvider(providers)
 
     def normalize_symbol(self, symbol: str) -> str:
         """

@@ -18,7 +18,17 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 15
     refresh_token_expire_days: int = 30
     
-    market_data_provider: str = "yahoo"
+    market_data_provider: str = "yahoo,duckduckgo"
+    
+    alpha_vantage_api_key: str | None = None
+    finnhub_api_key: str | None = None
+    fmp_api_key: str | None = None
+    tavily_api_key: str | None = None
+    serper_api_key: str | None = None
+    marketaux_api_key: str | None = None
+    exa_api_key: str | None = None
+    firecrawl_api_key: str | None = None
+    linkup_api_key: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=(".env", "../.env", "../../.env"),

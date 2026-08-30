@@ -1,7 +1,10 @@
-import pytest
 from datetime import date
-from app.services.market_data import MarketDataService
+
+import pytest
+
 from app.core.errors import SymbolNotFoundError
+from app.services.market_data import MarketDataService
+
 
 def test_market_data_service_initialization():
     service = MarketDataService(provider_name="mock")

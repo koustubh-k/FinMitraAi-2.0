@@ -1,11 +1,13 @@
-from typing import Protocol, Optional
 from datetime import date
+from typing import Protocol
+
 from app.schemas.market_data import (
-    Quote,
-    HistoricalPriceResponse,
     CompanyProfile,
-    FinancialMetrics
+    FinancialMetrics,
+    HistoricalPriceResponse,
+    Quote,
 )
+
 
 class MarketDataProvider(Protocol):
     """Protocol defining the interface for all market data providers."""

@@ -26,4 +26,4 @@ Financial information is fragmented. Existing AI chatbots hallucinate facts, use
 - Evidence explorer
 
 ## 5. Phased Approach
-We are currently in Phase 0: Foundation Setup. The project will progress through adding backend logic, simple agents, RAG, and finally multi-agent workflows with safety guardrails.
+We are executing a 9-phase roadmap (consolidated from an initial 22-phase plan). We have completed Phase 0 (Foundation) and Phase 1 (Backend + Data Foundation), and are currently wrapping up Phase 2 (Authentication + Market Data) and Phase 3 (Deterministic Financial Engine). The next major goal is Phase 4, which will introduce the AI Research MVP combining RAG, Evidence tracking, and the first LangGraph agent. Subsequent phases will introduce multi-agent orchestration, safety guardrails, and production hardening.
