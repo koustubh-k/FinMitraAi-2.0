@@ -1,5 +1,5 @@
-import logging
-import requests
+from app.core.logger import setup_logger
+import httpx
 from datetime import date
 
 from app.core.config import settings
@@ -12,7 +12,7 @@ from app.schemas.market_data import (
     Quote,
 )
 
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
 
 
 class FinnhubProvider(MarketDataProvider):
@@ -40,7 +40,7 @@ class FinnhubProvider(MarketDataProvider):
         }
         
         try:
-            response = requests.get(url, params=params, timeout=10)
+            response = httpx.get(url, params=params, timeout=10)
             
             # Finnhub returns 429 for rate limit exceeded
             if response.status_code == 429:
@@ -62,7 +62,7 @@ class FinnhubProvider(MarketDataProvider):
                 source="finnhub"
             )
             
-        except requests.RequestException as e:
+        except httpx.HTTPError as e:
             logger.error(f"Finnhub request failed for {symbol}: {e}")
             raise ProviderUnavailableError(f"Network error with Finnhub: {e}")
         except SymbolNotFoundError:

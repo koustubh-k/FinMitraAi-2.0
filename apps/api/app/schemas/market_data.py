@@ -10,11 +10,11 @@ class Quote(BaseModel):
     symbol: str
     price: float
     currency: str
-    timestamp: datetime
+    timestamp: datetime = Field(default_factory=utc_now)
     previous_close: float | None = None
     day_change: float | None = None
     day_change_percent: float | None = None
-    data_timestamp: datetime
+    data_timestamp: datetime = Field(default_factory=utc_now)
     retrieved_at: datetime = Field(default_factory=utc_now)
 
 class HistoricalPrice(BaseModel):

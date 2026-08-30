@@ -7,16 +7,16 @@ export default function AssistantPage() {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [answer, setAnswer] = useState<string | null>(null);
+  const [toolResults, setToolResults] = useState<any[]>([]);
   const [citations, setCitations] = useState<string[]>([]);
   const [route, setRoute] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setStatus("Starting assistant...");
     setAnswer(null);
     setCitations([]);
+    setToolResults([]);
     setRoute(null);
 
     try {
@@ -46,11 +46,15 @@ export default function AssistantPage() {
           const events = chunk.split("\n\n");
           
           for (const event of events) {
-            if (event.startsWith("data:")) {
-              const dataStr = event.replace("data: ", "").trim();
-              if (dataStr) {
+            if (event.startsWith("event: ")) {
+              const lines = event.split("\n");
+              const eventType = lines[0].replace("event: ", "").trim();
+              const dataLine = lines.find(l => l.startsWith("data: "));
+              if (dataLine) {
+                const dataStr = dataLine.replace("data: ", "").trim();
                 const data = JSON.parse(dataStr);
-                if (data.status) {
+                
+                if (eventType === "status") {
                     const stateMessages: Record<string, string> = {
                         "routing": "Understanding your question...",
                         "analyzing_portfolio": "Analyzing your portfolio...",
@@ -60,15 +64,18 @@ export default function AssistantPage() {
                         "generating_answer": "Synthesizing evidence...",
                         "validating_citations": "Validating citations...",
                     };
-                    // Handle tool running status
                     if (data.status.startsWith("running_tool_")) {
                         setStatus(`Checking ${data.status.replace("running_tool_", "")}...`);
                     } else {
                         setStatus(stateMessages[data.status] || data.status);
                     }
-                } else if (data.answer) {
+                } else if (eventType === "tool_results") {
+                    setToolResults(data);
+                } else if (eventType === "citations") {
+                    setCitations(data);
+                } else if (eventType === "complete") {
                     setAnswer(data.answer);
-                    setCitations(data.citations || []);
+                    if (data.citations) setCitations(data.citations);
                     setRoute(data.route);
                     setStatus(null);
                 }
@@ -79,7 +86,7 @@ export default function AssistantPage() {
       }
     } catch (error) {
       console.error(error);
-      setStatus("An error occurred. Please ensure you are logged in.");
+      setStatus("An error occurred. Please ensure you are logged in and the service is available.");
     } finally {
       setIsLoading(false);
     }
@@ -117,6 +124,27 @@ export default function AssistantPage() {
           </p>
         </div>
       )}
+      
+      {toolResults.length > 0 && (
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          {toolResults.map((result, idx) => {
+             const toolName = Object.keys(result)[0];
+             let toolData = result[toolName];
+             try { if (typeof toolData === 'string') toolData = JSON.parse(toolData); } catch(e) {}
+             
+             return (
+              <div key={idx} className="p-4 border border-blue-200 bg-blue-50 rounded-lg shadow-sm">
+                <h4 className="font-semibold text-blue-800 text-sm mb-2 uppercase tracking-wide">{toolName.replace(/_/g, ' ')}</h4>
+                {toolData.error ? (
+                  <p className="text-red-600 text-sm">{toolData.error}</p>
+                ) : (
+                  <pre className="text-xs text-blue-900 overflow-auto">{JSON.stringify(toolData, null, 2)}</pre>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {answer && (
         <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
@@ -130,11 +158,11 @@ export default function AssistantPage() {
           </div>
           
           {citations.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-gray-100">
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Sources Cited</h3>
+            <div className="mt-6 pt-4 border-t border-gray-100 bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-2">Sources & Evidence</h3>
               <ul className="list-disc pl-5 text-sm text-gray-600">
                 {citations.map((cite, i) => (
-                  <li key={i}>{cite}</li>
+                  <li key={i} className="mb-1">{cite}</li>
                 ))}
               </ul>
             </div>

@@ -1,6 +1,6 @@
-import logging
+from app.core.logger import setup_logger
 import re
-import requests
+import httpx
 from datetime import date
 from decimal import Decimal
 
@@ -14,7 +14,7 @@ from app.schemas.market_data import (
     Quote,
 )
 
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
 
 
 class TavilyProvider(MarketDataProvider):
@@ -44,7 +44,7 @@ class TavilyProvider(MarketDataProvider):
         }
         
         try:
-            response = requests.post(self.BASE_URL, json=payload, timeout=10)
+            response = httpx.post(self.BASE_URL, json=payload, timeout=10)
             response.raise_for_status()
             data = response.json()
             
@@ -75,7 +75,7 @@ class TavilyProvider(MarketDataProvider):
             
             raise ProviderUnavailableError(f"Could not extract price for {symbol} from Tavily")
             
-        except requests.RequestException as e:
+        except httpx.HTTPError as e:
             logger.error(f"Tavily request failed for {symbol}: {e}")
             raise ProviderUnavailableError(f"Network error with Tavily: {e}")
         except Exception as e:

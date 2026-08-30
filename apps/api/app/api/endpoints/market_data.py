@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from app.api.middleware import limiter
 
 from app.core.errors import (
     InvalidMarketDataError,
@@ -32,7 +33,9 @@ def handle_market_error(e: Exception):
         raise HTTPException(status_code=500, detail="An unexpected error occurred while fetching market data")
 
 @router.get("/quote/{symbol}", response_model=Quote)
+@limiter.limit("30/minute")
 def get_quote(
+    request: Request,
     symbol: str,
     market_service: MarketDataService = Depends(get_market_data_service)
 ):
@@ -42,7 +45,9 @@ def get_quote(
         handle_market_error(e)
 
 @router.get("/history/{symbol}", response_model=HistoricalPriceResponse)
+@limiter.limit("20/minute")
 def get_history(
+    request: Request,
     symbol: str,
     start: date = Query(None, description="Start date (defaults to 30 days ago)"),
     end: date = Query(None, description="End date (defaults to today)"),

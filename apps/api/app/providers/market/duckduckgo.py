@@ -1,4 +1,4 @@
-import logging
+from app.core.logger import setup_logger
 import re
 from datetime import date
 from decimal import Decimal
@@ -14,7 +14,7 @@ from app.schemas.market_data import (
     Quote,
 )
 
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
 
 
 class DuckDuckGoProvider(MarketDataProvider):

@@ -1,5 +1,5 @@
-import logging
-import requests
+from app.core.logger import setup_logger
+import httpx
 from datetime import date
 
 from app.core.config import settings
@@ -12,7 +12,7 @@ from app.schemas.market_data import (
     Quote,
 )
 
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
 
 
 class AlphaVantageProvider(MarketDataProvider):
@@ -40,7 +40,7 @@ class AlphaVantageProvider(MarketDataProvider):
         }
         
         try:
-            response = requests.get(self.BASE_URL, params=params, timeout=10)
+            response = httpx.get(self.BASE_URL, params=params, timeout=10)
             response.raise_for_status()
             data = response.json()
             
@@ -62,7 +62,7 @@ class AlphaVantageProvider(MarketDataProvider):
                 source="alphavantage"
             )
             
-        except requests.RequestException as e:
+        except httpx.HTTPError as e:
             logger.error(f"Alpha Vantage request failed for {symbol}: {e}")
             raise ProviderUnavailableError(f"Network error with Alpha Vantage: {e}")
         except SymbolNotFoundError:

@@ -1,0 +1,9 @@
+{"query": "What are the major risks facing TCS?", "expected_route": "research"}
+{"query": "What is my portfolio value?", "expected_route": "portfolio"}
+{"query": "Explain P/E ratio to a beginner", "expected_route": "education"}
+{"query": "Hello, how are you?", "expected_route": "general"}
+{"query": "What does the annual report say about revenue growth?", "expected_route": "research"}
+{"query": "How much of my portfolio is invested in TCS?", "expected_route": "portfolio"}
+{"query": "Explain beta mathematically", "expected_route": "education"}
+{"query": "What is my TCS P&L?", "expected_route": "portfolio"}
+{"query": "What factors affected India's IT sector?", "expected_route": "research"}

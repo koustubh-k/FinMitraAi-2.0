@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel
 from sse_starlette.sse import EventSourceResponse
 from app.agents.state import AssistantState
@@ -7,6 +7,7 @@ from app.auth.dependencies import get_current_user
 from app.models.user import User
 import json
 import asyncio
+from app.api.middleware import limiter
 
 router = APIRouter()
 
@@ -16,8 +17,10 @@ class AssistantRequest(BaseModel):
 agent_workflow = build_graph()
 
 @router.post("/chat")
+@limiter.limit("10/minute")
 async def run_assistant(
-    request: AssistantRequest,
+    request: Request,
+    body: AssistantRequest,
     current_user: User = Depends(get_current_user)
 ):
     """
@@ -28,7 +31,7 @@ async def run_assistant(
         # Inject the authenticated user ID into the state
         state = AssistantState(
             user_id=str(current_user.id),
-            query=request.query, 
+            query=body.query, 
             messages=[],
             route=None,
             retrieved_chunks=[],
@@ -40,17 +43,34 @@ async def run_assistant(
             error=None
         )
         
-        # We can run the compiled graph
-        for event in agent_workflow.stream(state):
+        # We can run the compiled graph with recursion limits for safety
+        config = {"recursion_limit": 10}
+        
+        last_yielded_tool_results = []
+        last_yielded_citations = []
+
+        for event in agent_workflow.stream(state, config=config):
             for key, val in event.items():
                 if "status" in val:
                     yield {
                         "event": "status",
                         "data": json.dumps({"status": val["status"]})
                     }
+                if "tool_results" in val and val["tool_results"] != last_yielded_tool_results:
+                    last_yielded_tool_results = val["tool_results"].copy()
+                    yield {
+                        "event": "tool_results",
+                        "data": json.dumps(val["tool_results"])
+                    }
+                if "citations" in val and val["citations"] != last_yielded_citations:
+                    last_yielded_citations = val["citations"].copy()
+                    yield {
+                        "event": "citations",
+                        "data": json.dumps(val["citations"])
+                    }
         
         # Get final state
-        final_state = agent_workflow.invoke(state)
+        final_state = agent_workflow.invoke(state, config=config)
         
         yield {
             "event": "complete",
