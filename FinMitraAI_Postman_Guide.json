@@ -1,0 +1,311 @@
+{
+  "info": {
+    "_postman_id": "a5f7b8c9-1a2b-3c4d-5e6f-7a8b9c0d1e2f",
+    "name": "FinMitraAI API Testing Guide",
+    "description": "Complete Postman API testing guide for FinMitraAI backend endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"Password123!\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{API_BASE_URL}}/auth/register",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{API_BASE_URL}}/auth/login",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{AUTH_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_BASE_URL}}/auth/me",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{REFRESH_TOKEN}}\"\n}"
+            },
+            "url": {
+              "raw": "{{API_BASE_URL}}/auth/refresh",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["auth", "refresh"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Portfolios",
+      "item": [
+        {
+          "name": "Create a Portfolio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{AUTH_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Tech Portfolio\",\n  \"description\": \"Tech heavy growth portfolio\"\n}"
+            },
+            "url": {
+              "raw": "{{API_BASE_URL}}/portfolios/",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["portfolios", ""]
+            }
+          }
+        },
+        {
+          "name": "Add a Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{AUTH_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symbol\": \"AAPL\",\n  \"transaction_type\": \"buy\",\n  \"quantity\": 10,\n  \"price\": 150.00,\n  \"transaction_date\": \"2023-10-01\"\n}"
+            },
+            "url": {
+              "raw": "{{API_BASE_URL}}/portfolios/{{PORTFOLIO_ID}}/transactions",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["portfolios", "{{PORTFOLIO_ID}}", "transactions"]
+            }
+          }
+        },
+        {
+          "name": "Get Portfolio Holdings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{AUTH_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_BASE_URL}}/portfolios/{{PORTFOLIO_ID}}/holdings",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["portfolios", "{{PORTFOLIO_ID}}", "holdings"]
+            }
+          }
+        },
+        {
+          "name": "Get Portfolio Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{AUTH_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{API_BASE_URL}}/portfolios/{{PORTFOLIO_ID}}/summary",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["portfolios", "{{PORTFOLIO_ID}}", "summary"]
+            }
+          }
+        }
+      ]
+        },
+    {
+      "name": "Market Data",
+      "item": [
+        {
+          "name": "Get Stock Quote",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_BASE_URL}}/market/quote/AAPL",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["market", "quote", "AAPL"]
+            }
+          }
+        },
+        {
+          "name": "Get Historical Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{API_BASE_URL}}/market/history/AAPL?period=1y&interval=1d",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["market", "history", "AAPL"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "1y"
+                },
+                {
+                  "key": "interval",
+                  "value": "1d"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI Assistant",
+      "item": [
+        {
+          "name": "Chat with Financial Assistant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{AUTH_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is the current outlook for AAPL?\",\n  \"history\": [],\n  \"context\": {\n    \"portfolio_id\": \"{{PORTFOLIO_ID}}\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{API_BASE_URL}}/assistant/chat",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["assistant", "chat"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "Upload a Financial Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{AUTH_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "value": "",
+                  "type": "file"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{API_BASE_URL}}/documents/upload",
+              "host": ["{{API_BASE_URL}}"],
+              "path": ["documents", "upload"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "id": "var-1",
+      "name": "API_BASE_URL",
+      "value": "http://localhost:8000/api/v1",
+      "type": "string"
+    },
+    {
+      "id": "var-2",
+      "name": "AUTH_TOKEN",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "var-3",
+      "name": "REFRESH_TOKEN",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "var-4",
+      "name": "PORTFOLIO_ID",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.endpoints import auth, market_data, portfolios, users, research, assistant
+from app.api.endpoints import auth, market_data, portfolios, users, research, assistant, documents
 
 api_router = APIRouter()
 
@@ -10,3 +10,4 @@ api_router.include_router(portfolios.router, prefix="/portfolios", tags=["Portfo
 api_router.include_router(market_data.router, prefix="/market", tags=["Market Data"])
 api_router.include_router(research.router, prefix="/research", tags=["Research"])
 api_router.include_router(assistant.router, prefix="/assistant", tags=["Assistant"])
+api_router.include_router(documents.router, prefix="/documents", tags=["Documents"])

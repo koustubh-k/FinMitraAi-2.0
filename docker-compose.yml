@@ -6,7 +6,9 @@ services:
       POSTGRES_PASSWORD: finmitra
       POSTGRES_DB: finmitra
     ports:
-      - "5432:5432"
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U finmitra -d finmitra"]
       interval: 5s
@@ -16,7 +18,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "6380:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -28,6 +30,8 @@ services:
       context: ./apps/api
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     environment:
       - DATABASE_URL=postgresql+psycopg://finmitra:finmitra@postgres:5432/finmitra
       - REDIS_URL=redis://redis:6379/0
@@ -59,3 +63,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+
+volumes:
+  pgdata:

@@ -34,6 +34,21 @@ docker compose logs -f
 docker compose down
 ```
 
+After the containers are started, apply database migrations:
+
+```bash
+docker compose exec api alembic upgrade head
+```
+
+Local service URLs:
+
+| Service | Host URL/Port | Notes |
+|---|---|---|
+| Web | `http://localhost:3000` | Next.js app |
+| API | `http://localhost:8000` | FastAPI app and OpenAPI docs |
+| PostgreSQL | `localhost:5433` | Maps to `5432` inside Docker |
+| Redis | `localhost:6380` | Maps to `6379` inside Docker |
+
 ## Local Development (Without Docker for App Code)
 
 If you prefer to run the API and Web locally (faster reload times):
@@ -41,6 +56,13 @@ If you prefer to run the API and Web locally (faster reload times):
 ### 1. Start Infrastructure only
 ```bash
 docker compose up -d postgres redis
+```
+
+When running the API on the host, use host ports in your local environment:
+
+```bash
+DATABASE_URL=postgresql+psycopg://finmitra:finmitra@127.0.0.1:5433/finmitra
+REDIS_URL=redis://127.0.0.1:6380/0
 ```
 
 ### 2. Run API
@@ -82,10 +104,21 @@ docker compose exec api alembic upgrade head
 ```bash
 # Backend
 cd apps/api
-pytest
+.venv\Scripts\python.exe -m pytest tests -q
 ruff check .
 
 # Frontend
 cd apps/web
 npm run lint
+npm run build
+npx playwright install chromium
+npx playwright test
 ```
+
+Verified on 2026-09-02:
+
+- Backend tests: `84 passed, 3 warnings`
+- Frontend lint: passed
+- Frontend production build: passed
+- Playwright smoke test: passed
+- Docker services: `postgres`, `redis`, `api`, and `web` healthy

@@ -18,7 +18,7 @@ for m in mistral_models:
         print(f"Testing mistral {m}...")
         llm = ChatMistralAI(model=m)
         res = llm.invoke("Hi")
-        print(f"SUCCESS Mistral: {m}")
+        print(f"SUCCESS Mistral: {m}")      
         working_provider = "mistral"
         working_model = m
         break
@@ -28,6 +28,16 @@ for m in mistral_models:
 if not working_provider:
     from langchain_groq import ChatGroq
     for m in groq_models:
+        try:
+            print(f"Testing groq {m}...")
+            llm = ChatGroq(model=m)
+            res = llm.invoke("Hi")
+            print(f"SUCCESS Groq: {m}")
+            working_provider = "groq"
+            working_model = m
+            break
+        except Exception as e:
+            print(f"Failed {m}: {e}")
 
 if not working_provider:
     from langchain_google_genai import ChatGoogleGenerativeAI
