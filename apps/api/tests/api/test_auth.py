@@ -24,6 +24,8 @@ def test_register_success(mock_auth_service):
     mock_user = User(
         id=user_id,
         email="test@example.com",
+        first_name="John",
+        last_name="Doe",
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -31,7 +33,7 @@ def test_register_success(mock_auth_service):
     
     response = client.post(
         "/api/v1/auth/register",
-        json={"email": "test@example.com", "password": "securepassword"}
+        json={"email": "test@example.com", "password": "securepassword", "first_name": "John", "last_name": "Doe"}
     )
     assert response.status_code == 201
     data = response.json()
@@ -61,6 +63,8 @@ def test_auth_me():
     mock_user = User(
         id=user_id, 
         email="test@example.com",
+        first_name="John",
+        last_name="Doe",
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -71,5 +75,7 @@ def test_auth_me():
         response = client.get("/api/v1/auth/me")
         assert response.status_code == 200
         assert response.json()["email"] == "test@example.com"
+        assert response.json()["first_name"] == "John"
+        assert response.json()["last_name"] == "Doe"
     finally:
         app.dependency_overrides.clear()

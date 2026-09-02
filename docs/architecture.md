@@ -9,8 +9,8 @@ graph TD
     subgraph Services
         Web[Next.js Frontend\n:3000]
         API[FastAPI Backend\n:8000]
-        Postgres[(PostgreSQL\n:5432)]
-        Redis[(Redis\n:6379)]
+        Postgres[(PostgreSQL\nhost :5433\ncontainer :5432)]
+        Redis[(Redis\nhost :6380\ncontainer :6379)]
     end
     
     Compose --> Web

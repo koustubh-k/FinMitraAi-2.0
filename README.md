@@ -20,6 +20,20 @@ The project is being rebuilt from the ground up with a focus on:
 
 ---
 
+## Current Verified Status
+
+Last verified: 2026-09-02
+
+- Docker stack runs locally with `postgres`, `redis`, `api`, and `web` healthy.
+- Web app: `http://localhost:3000`
+- API: `http://localhost:8000`
+- Host database/cache ports: PostgreSQL `5433`, Redis `6380` to avoid conflicts with other local stacks. Inside Docker, services still use PostgreSQL `5432` and Redis `6379`.
+- Backend tests pass: `84 passed, 3 warnings`.
+- Frontend checks pass: `npm run lint`, `npm run build`, and Playwright smoke test.
+- Live integration smoke test passes for auth, portfolio creation, transactions, holdings, summary, allocation, market quote/history/company/metrics, assistant SSE, document upload, and logout.
+
+---
+
 ## Why FinMitra?
 
 Financial information is distributed across market data, company filings, financial statements, news, and other sources.
@@ -476,17 +490,27 @@ pgvector
 
 Docker Compose is used to make the development environment reproducible.
 
-### Planned startup
+Current compose host ports:
+
+```text
+Web          http://localhost:3000
+API          http://localhost:8000
+PostgreSQL   localhost:5433 -> container:5432
+Redis        localhost:6380 -> container:6379
+```
+
+### Startup
 
 ```bash
-docker compose up -d
+docker compose up -d --build
+docker compose exec api alembic upgrade head
 ```
 
 ### Environment Setup (API Keys)
 
 To run FinMitra 2.0 with full AI capabilities, you need to set up free API keys in your `.env` file for the preferred LLM and Market Data providers. 
 
-Please refer to the detailed **[Phase 4 Setup Guide](docs/setup/phase-4-setup.md)** for instructions on how to obtain API keys from:
+Please refer to the unified **[Setup Guide](docs/setup/setup.md)** for current setup instructions, including API keys from:
 - **LLM Providers:** [Groq](https://console.groq.com/), [Google AI Studio (Gemini)](https://aistudio.google.com/), or [OpenRouter](https://openrouter.ai/).
 - **Market Data Providers:** [AlphaVantage](https://www.alphavantage.co/support/#api-key), [Finnhub](https://finnhub.io/register), etc.
 

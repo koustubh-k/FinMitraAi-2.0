@@ -36,6 +36,8 @@ class AuthService:
         user = User(
             email=user_in.email,
             password_hash=password_hash,
+            first_name=user_in.first_name,
+            last_name=user_in.last_name,
             is_active=True
         )
         self.db.add(user)
